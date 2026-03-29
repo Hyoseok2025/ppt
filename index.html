@@ -242,7 +242,7 @@
 <body>
 
     <div class="progress-bar" id="progressBar"></div>
-    <div class="page-indicator" id="pageIndicator">01 / 14</div>
+    <div class="page-indicator" id="pageIndicator">01 / 13</div>
 
     <div class="nav-controls">
         <button class="nav-btn" onclick="prevSlide()" id="prevBtn" aria-label="이전"><i class="fa-solid fa-chevron-left"></i></button>
@@ -359,7 +359,7 @@
         </div>
     </div>
 
-    <!-- [4] 대한민국 상황 -->
+    <!-- [5] 대한민국 상황 및 난이도 고백 (통합) -->
     <div class="slide">
         <div class="slide-container">
             <div class="image-wrapper">
@@ -373,18 +373,6 @@
                     <p class="dialogue-text">"대한민국 현재 상태. 2050년까지 탄소 0 만들어야 한다. 국가 시스템을 바꾸는 수준이다."</p>
                 </div>
                 <div class="dialogue-card s1-card"><p class="dialogue-text">"...시간 진짜 없네요"</p></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- [5] 난이도 고백 -->
-    <div class="slide">
-        <div class="slide-container">
-            <div class="image-wrapper bg-slate-900 flex items-center justify-center">
-                <p class="text-gray-500 text-xs">CONFESSION SCENE</p>
-            </div>
-            <div class="script-content">
-                <span class="text-green-500 font-black text-xs">SCENE #05-2</span>
                 <div class="direction">(잠깐 정적, 강사가 낮은 목소리로)</div>
                 <div class="dialogue-card inst-card">
                     <span class="role-label text-green-400">강사 (작게)</span>
@@ -540,7 +528,7 @@
             if (e.key === 'ArrowLeft') prevSlide();
         });
 
-        // Touch support (Optional but good)
+        // Touch support
         let touchstartX = 0;
         let touchendX = 0;
         
