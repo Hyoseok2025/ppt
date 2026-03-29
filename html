@@ -3,438 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>탄소중립 벼락치기 - 최종 촬영 콘티북</title>
+    <title>탄소중립 벼락치기 - 인터랙티브 슬라이드 콘티</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
         
         :root {
             --accent: #2ecc71;
-            --dark: #0d1117;
-            --card: #161b22;
+            --dark: #0a0c10;
+            --inst-navy: #003366;
+            --student1-blue: #3498db;
+            --student2-gold: #f1c40f;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #010409;
+            background-color: var(--dark);
             color: #e6edf3;
             margin: 0;
-            padding: 40px 0;
-        }
-
-        .slide-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
+            overflow: hidden; 
         }
 
         .slide {
-            background-color: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            padding: 40px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at 10% 10%, rgba(46, 204, 113, 0.05) 0%, transparent 50%);
         }
 
-        .slide-header {
-            background: linear-gradient(90deg, #000 0%, transparent 100%);
-            padding: 25px 40px;
-            border-bottom: 3px solid var(--accent);
+        .slide.active {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .slide-container {
+            max-width: 1500px;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 50px;
             align-items: center;
         }
 
-        .scene-id {
-            color: var(--accent);
-            font-weight: 900;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .scene-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 30px;
-            padding: 30px 40px;
-        }
-
-        .image-box {
-            width: 100%;
-            height: 450px;
-            background-color: #000;
-            border-radius: 12px;
+        .image-wrapper {
+            border-radius: 24px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            height: 75vh;
+            background-color: #111;
         }
 
-        .image-box img {
+        .image-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
         }
 
-        .script-box {
+        .script-content {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-        }
-
-        .label {
-            font-size: 0.8rem;
-            color: var(--accent);
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(46, 204, 113, 0.2);
-            padding-bottom: 4px;
-            margin-bottom: 8px;
-            display: block;
+            gap: 15px;
+            height: 75vh;
+            overflow-y: auto;
+            padding-right: 25px;
         }
 
         .dialogue-card {
             background: rgba(255,255,255,0.03);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 6px solid #444;
+            margin-bottom: 8px;
         }
 
-        .role {
+        .role-label {
             font-weight: 900;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 5px;
             display: block;
+            text-transform: uppercase;
         }
 
-        .text {
-            font-size: 1.1rem;
+        .dialogue-text {
+            font-size: 1.25rem;
             line-height: 1.6;
         }
 
+        .inst-card { border-left-color: var(--accent); }
+        .s1-card { border-left-color: var(--student1-blue); }
+        .s2-card { border-left-color: var(--student2-gold); }
+
         .direction {
             font-style: italic;
-            color: #8b949e;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            color: #94a3b8;
+            font-size: 1.05rem;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
         }
 
-        /* GitHub 가이드 스타일 */
-        .github-guide {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px dashed var(--accent);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-            font-size: 0.9rem;
-        }
-
-        .title-slide {
-            height: 600px;
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 50px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
             align-items: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1a3a32 0%, #010409 100%);
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s;
         }
 
-        .title-slide h1 {
-            font-size: 5rem;
+        .nav-btn:hover { background: var(--accent); color: black; border-color: var(--accent); }
+        .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: var(--accent);
+            z-index: 1000;
+            transition: width 0.3s;
+        }
+
+        .page-indicator {
+            position: fixed;
+            bottom: 35px;
+            left: 50px;
             font-weight: 900;
-            margin: 0;
+            color: var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
         }
 
-        .title-slide h1 span { color: var(--accent); }
+        .intro-slide {
+            justify-content: center !important;
+            align-items: center !important;
+            display: none;
+            background: radial-gradient(circle at center, var(--inst-navy) 0%, var(--dark) 100%);
+        }
+
+        .intro-slide.active { display: flex; }
+        .main-title { font-size: 5.5rem; font-weight: 900; letter-spacing: -4px; }
+        .main-title span { color: var(--accent); }
+
+        .script-content::-webkit-scrollbar { width: 4px; }
+        .script-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         
-        .no-print { display: block; }
-        @media print { .no-print { display: none; } }
+        .highlight-text { color: var(--accent); font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="slide-container">
-        
-        <!-- GitHub 연동 가이드 -->
-        <div class="github-guide no-print">
-            <h3 class="font-bold text-lg mb-2 text-green-400">💡 GitHub 이미지 경로 문제 해결</h3>
-            <p>스크린샷을 보니 이미지가 <strong>img</strong> 폴더 안에 있습니다. 코드의 경로를 <code>img/파일명.jpg</code>로 일괄 수정했습니다.</p>
-            <ul class="list-disc ml-5 mt-2 text-gray-400">
-                <li><strong>로컬/Codespace 환경:</strong> 현재 코드의 <code>img/</code> 경로로 이미지가 잘 보일 것입니다.</li>
-                <li><strong>GitHub에서 직접 볼 때:</strong> 이미지가 안 뜨면 아래의 Raw 링크 형식을 사용해야 합니다.</li>
-                <li><code>https://raw.githubusercontent.com/[사용자명]/[저장소명]/[브랜치]/img/[파일명]</code></li>
-            </ul>
-        </div>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="page-indicator" id="pageIndicator">01 / 14</div>
 
-        <!-- TITLE SLIDE -->
-        <div class="slide title-slide">
-            <h1>탄소중립 <span>벼락치기</span></h1>
-            <p class="text-xl text-gray-500 mt-4">한국동서발전 촬영용 최종 마스터 콘티북 (전체 13컷)</p>
-        </div>
-
-        <!-- SCENE 1-1 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #01-1</span>
-                <span class="scene-title">오프닝: 절망의 밤</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/A_cinematic_top-down_overhead_shot_of_a_messy_stud-1774699249413.jpg" alt="[어질러진 책상]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">어두운 조명. 책상 위에는 형광펜과 노트가 어질러져 있다. 학생 1이 한숨을 쉬며 펜을 놓는 오버헤드 샷.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-blue-400">학생 1</span>
-                        <p class="text">"아... 시험 얼마 안 남았는데... (한숨) 이거 진짜 떨어지면 끝나는 거 아니야?"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 1-2 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #01-2</span>
-                <span class="scene-title">발견: 한 줄기 희망</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/An_extreme_cinematic_close-up_shot_of_a_smartphone-1774699308523.jpg" alt="[핸드폰 화면 클로즈업]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">안경에 핸드폰 화면 빛이 반사된다. 화면의 '탄소중립 하루 특강' 문구가 강조되는 익스트림 클로즈업.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-blue-400">학생 1</span>
-                        <p class="text">"...어? 하루 만에 된다고? '탄소중립 하루 특강'... 일단 신청해볼까."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 2 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #02</span>
-                <span class="scene-title">등장: 카리스마 1타 강사</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/A_dynamic_low-angle_cinematic_shot_captured_with_I-1774699853329.jpg" alt="[강사 등장 로우앵글]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">남색 수트와 초록 넥타이를 맨 강사가 위풍당당하게 등장한다. 로우앵글 샷으로 권위와 카리스마 강조.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"지금 상황이 어떤 상황인지 알고는 있냐? 이건 전 세계가 같이 치는 시험이다."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 3 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #03</span>
-                <span class="scene-title">선언: 벼락치기 시작</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/A_dynamic_cinematic_classroom_scene_captured_with_-1774700413013.jpg" alt="[벼락치기 판서]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">칠판에 적힌 '벼락치기' 문구를 손바닥으로 강하게 내리치며 학생들의 주의를 집중시킨다.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"지금 대한민국은 탄소중립을 위해 벼락치기 중이다! 시험 전날이라고 과목 바꿀 수 있어?"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 4 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #04</span>
-                <span class="scene-title">강조: 1.5도의 임계점</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/A_cinematic_medium_shot_classroom_scene_captured_w-1774701206917.jpg" alt="[1.5도 한계 그래픽]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">초록 칠판 위에 불타는 지구 그래픽과 함께 '1.5도 한계', '파리기후협약' 텍스트가 강렬하게 표시된다.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"지구 온도 1.5도 넘으면 끝이다. 파리기후협약도 이걸 막자고 적혀있는 거야!"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 5 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #05</span>
-                <span class="scene-title">대한민국: 2050 탄소 0 목표</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/A_cinematic_classroom_scene_captured_with_IMAX_fil-1774701209964.jpg" alt="[대한민국 지도 그래픽]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">초록색 한반도 지도 그래픽과 '2050년까지 탄소 0' 텍스트가 나타난다. 강사가 지도의 핵심을 짚는다.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"우리나라 목표는 2050년까지 탄소 0다. 국가 시스템을 완전히 바꾸는 일이야."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 6-1 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #06-1</span>
-                <span class="scene-title">기술: 탄소를 잡는 DAC</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/image_7e14bf.jpg" alt="[DAC 탄소포집 그래픽]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">초록 칠판 위 복잡한 탄소 포집 설비 도식 그래픽. 기계적인 원리와 탄소 분자의 흐름 시각화.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"탄소가 나오면 잡으면 된다. 연간 3천 톤 이상을 잡아서 반도체 세정에 다시 쓴다."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 6-2 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #06-2</span>
-                <span class="scene-title">상생: 주민 참여형 풍력</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/Split-screen_video_conference_layout_composition_-1774706012017.jpg" alt="[풍력발전과 리액션]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">풍력 발전기 그래픽. 우측 하단 리액션 박스 속 두 학생이 감탄하며 긍정적인 반응을 보인다.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"풍력 발전? 이제 주민들과 수익을 나눈다. 이게 상생이야!"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 6-3 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #06-3</span>
-                <span class="scene-title">활용: 옥상 태양광 발전</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/Split-screen_video_conference_layout_composition_-1774706003217.jpg" alt="[옥상 태양광 그래픽]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">도심 빌딩과 아파트 옥상의 태양광 패널 그래픽. 일상 속 버려진 공간의 재발견.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"옥상 놀고 있지? 그걸 전기로 바꾸는 거야. 이미 도심 곳곳에서 시작되고 있어."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 6-4 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #06-4</span>
-                <span class="scene-title">저장: 거대 배터리 양수발전</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/Split-screen_video_conference_layout_composition_-1774706245176.jpg" alt="[양수발전 원리 그래픽]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">상부와 하부 저수지 사이로 물이 흐르는 에너지 저장 원리 그래픽. '거대 배터리' 컨셉 강조.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"전기가 남으면 물로 저장한다! 이게 '양수발전'이고 거대한 배터리인 셈이지."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SCENE 7 -->
-        <div class="slide">
-            <div class="header slide-header">
-                <span class="scene-id">SCENE #07</span>
-                <span class="scene-title">엔딩: 우리의 미래</span>
-            </div>
-            <div class="content-grid">
-                <div class="image-box">
-                    <img src="img/Split-screen_video_conference_layout_composition_-1774706355790.jpg" alt="[강사 엔딩 샷]">
-                </div>
-                <div class="script-box">
-                    <div>
-                        <span class="label">Direction</span>
-                        <p class="direction">강사가 정면 카메라를 향해 확신에 찬 메시지를 던진다. 하단 박스 학생들도 희망찬 미소.</p>
-                    </div>
-                    <div class="dialogue-card">
-                        <span class="role text-green-400">강사</span>
-                        <p class="text">"정리한다. 바꾸고, 만들고, 저장한다. 이건 시험이 아니라- 우리 미래다."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer class="mt-10 text-center text-gray-600 text-sm pb-10">
-            &copy; 2024 한국동서발전 탄소중립 캠페인 스토리보드
-        </footer>
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-btn" onclick="nextSlide()" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
 
+    <!-- [0] Intro -->
+    <div class="slide intro-slide active">
+        <div class="text-center animate__animated animate__fadeIn">
+            <p class="text-xl text-gray-400 font-light mb-4">D-25년, 대한민국 미래 생존 전략</p>
+            <h1 class="main-title">탄소중립 <span>벼락치기</span></h1>
+            <p class="text-lg text-green-500 mt-6 font-bold tracking-widest uppercase">KOWEPO Final Master Storyboard (수정2 대본 반영)</p>
+            <p class="mt-12 text-gray-600 animate__animated animate__pulse animate__infinite">방향키(← →)로 페이지를 넘겨주세요</p>
+        </div>
+    </div>
+
+    <!-- [1] 오프닝 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/A_cinematic_top-down_overhead_shot_of_a_messy_stud-1774699249413.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #01: 오프닝</h3>
+                <div class="direction">(조용한 방. 책상 위 어질러진 필기, 형광펜, 노트)</div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1 (지친 목소리)</span>
+                    <p class="dialogue-text">"아... 시험 얼마 안 남았는데..."</p>
+                </div>
+                <div class="direction">(한숨)</div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span>
+                    <p class="dialogue-text">"이거... 진짜 떨어지면 끝나는 거 아니야?"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [1-2] 발견 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/An_extreme_cinematic_close-up_shot_of_a_smartphone-1774699308523.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #01-2: 발견</h3>
+                <div class="direction">(핸드폰 보다가 멈춤)</div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span>
+                    <p class="dialogue-text">"...어? (읽는다) 탄소중립 하루 특강? ...하루 만에 된다고? (짧은 고민) ...일단 신청해볼까"</p>
+                </div>
+                <div class="direction">(클릭 → 화면 전환)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [2] 강의 시작 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/A_dynamic_low-angle_cinematic_shot_captured_with_I-1774699853329.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #02: 강의 시작 (수정 반영)</h3>
+                <div class="direction">(강의실. 학생 1 착석 / 학생 2 옆자리. 뒤에서 강사 등장, 조용히 학생들 바라봄)</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사 (차분하게)</span>
+                    <p class="dialogue-text">"지금 상황이 어떤 상황인지 알고는 있냐?"</p>
+                </div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span><p class="dialogue-text">"...시험요?"</p>
+                </div>
+                <div class="dialogue-card s2-card">
+                    <span class="role-label text-yellow-400">학생 2</span><p class="dialogue-text">"...어렵다는 건 알겠는데요"</p>
+                </div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"단순히 어려운 시험이 아니다. 이건 실패하면 다시 볼 수 있는 시험도 아니고, 한 나라만 떨어진다고 끝나는 시험도 아니다. (한 박자) 전 세계가 같이 치는 시험이다."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [3] 벼락치기 선언 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/A_dynamic_cinematic_classroom_scene_captured_with_-1774700413013.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #03: 벼락치기</h3>
+                <div class="direction">(톤 전환, 책상 톡)</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"그래서— 지금부터 <span class="highlight-text">벼락치기</span> 하는 거다."</p>
+                </div>
+                <div class="dialogue-card s2-card">
+                    <span class="role-label text-yellow-400">학생 2 (작게)</span>
+                    <p class="dialogue-text">"...갑자기요?"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [4] 글로벌 흐름 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/A_cinematic_medium_shot_classroom_scene_captured_w-1774701206917.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #04: 글로벌 흐름</h3>
+                <div class="direction">(강사 칠판 톡톡) "이 시험, 우리만 보는 거 아니다. 전 세계가 같이 보는 시험이다. 한 나라라도 실패하면 다 같이 영향 받는다."</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"문제 1번. 지구 온도 <span class="highlight-text">1.5도</span> 넘으면? 너희 같으면 이거 넘겨도 된다고 보냐?"</p>
+                </div>
+                <div class="flex gap-2">
+                    <div class="dialogue-card s1-card flex-1">"...아니요"</div>
+                    <div class="dialogue-card s2-card flex-1">"...절대 안 되죠"</div>
+                </div>
+                <div class="direction">(잠깐 멈춤) "그래서 2015년에… 그… 파리… 그 협약…"</div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span><p class="dialogue-text">"...파리기후협약이요?"</p>
+                </div>
+                <div class="direction">(강사 바로 수습) "그래 그거. 핵심은 이거다. 1.5도 넘기지 말자. 그래서 나온 개념이 탄소중립이다. 탄소를 배출한 만큼 줄여서 결국 0으로 만드는 거다."</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [5] 대한민국 상황 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/A_cinematic_classroom_scene_captured_with_IMAX_fil-1774701209964.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #05: 대한민국 상황</h3>
+                <div class="direction">(칠판에 ‘대한민국’ 크게 작성)</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"대한민국 현재 상태. 2050년까지 탄소 0 만들어야 한다."</p>
+                </div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span><p class="dialogue-text">"...시간 진짜 없네요"</p>
+                </div>
+                <div class="direction">"그래서 지금 전부 바꾸는 중이다. 단순히 줄이는 게 아니라 국가 시스템을 바꾸는 수준이다."</div>
+                <div class="direction">(잠깐 정적, 작게) "...이거 솔직히 나도 어려웠다."</div>
+                <div class="flex gap-2">
+                    <div class="dialogue-card s2-card flex-1">"...네?"</div>
+                    <div class="dialogue-card s1-card flex-1">"이거 맞아요?"</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [6-1] 탄소 포집 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <!-- 사용자 지정 이미지 파일명 반영 -->
+                <img src="img/A_split-screen_layout_composition_Main_scene_A_c-1774704849828.png" alt="탄소 포집 기술">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #06: 한국동서발전 - 탄소 포집</h3>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"근데 탄소 나오면? (학생1: 줄여야죠?) 아니. <span class="highlight-text">잡는다.</span>"</p>
+                </div>
+                <div class="dialogue-card s2-card">
+                    <span class="role-label text-yellow-400">학생 2</span><p class="dialogue-text">"...그게 돼요?"</p>
+                </div>
+                <div class="direction">"된다. 한국동서발전은 울산발전본부에 국내 최초 천연가스 발전 이산화탄소 포집설비를 구축했다. 연간 3천 톤 이상을 잡고 99.9% 이상의 고순도 액화탄산가스로 만들어낸다."</div>
+                <div class="direction">"용접, 반도체, 농업까지 다양한 산업에 다시 활용된다. 배출도 줄이고, 가치도 만든다."</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [6-2] 풍력 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/Split-screen_video_conference_layout_composition_-1774706012017.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #07: 재생에너지 - 풍력</h3>
+                <div class="direction">(강사) "새로운 방식도 만든다. 풍력 발전이다. 근데 이건 좀 다르다. <span class="highlight-text">주민 참여형</span>이다."</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"너희라면 참여할 것 같냐, 안 할 것 같냐?"</p>
+                </div>
+                <div class="flex gap-2">
+                    <div class="dialogue-card s1-card flex-1">"...돈 되면 할 것 같은데요"</div>
+                    <div class="dialogue-card s2-card flex-1">"저도요"</div>
+                </div>
+                <div class="direction">"그래서 한다. 주민이 직접 투자하고 전기 판매 수익을 같이 나눈다. 이미 실제로 운영되고 있는 모델이다."</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [6-3] 태양광 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/Split-screen_video_conference_layout_composition_-1774706003217.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #08: 재생에너지 - 태양광</h3>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"옥상 놀고 있지? (학생1: 네) 그걸로 전기를 만든다고요? 버려지던 공간을 에너지로 바꾸는 거다. 이것도 이미 확산되고 있다."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [6-4] 양수 발전 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/Split-screen_video_conference_layout_composition_-1774706245176.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #09: 기술 4 - 양수 발전</h3>
+                <div class="direction">"전기 남으면 버리냐? (학생들: 아깝죠, 돈인데요) 그래서 저장한다. 물로."</div>
+                <div class="direction">(1초 정적) "...물요? ...이거 맞아요?"</div>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사 (살짝 웃으며)</span>
+                    <p class="dialogue-text">"놀리는 거 아니다. 이걸 <span class="highlight-text">‘양수발전’</span>이라고 한다. ‘전력 저장소’ 역할을 한다. 2038년 준공을 목표로 하고 있다."</p>
+                </div>
+                <div class="dialogue-card s1-card">
+                    <span class="role-label text-blue-400">학생 1</span><p class="dialogue-text">"...이건 시험에 나올 것 같아요."</p>
+                </div>
+                <div class="direction">(강사) "나온다."</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [7] 결론 -->
+    <div class="slide">
+        <div class="slide-container">
+            <div class="image-wrapper animate__animated animate__fadeInLeft">
+                <img src="img/Split-screen_video_conference_layout_composition_-1774706355790.png" alt="">
+            </div>
+            <div class="script-content animate__animated animate__fadeInRight">
+                <h3 class="text-green-500 font-black text-lg mb-2">SCENE #10: 결론</h3>
+                <div class="dialogue-card inst-card">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text">"정리한다. 바꾸고. 만들고. 저장한다."</p>
+                </div>
+                <div class="flex gap-2">
+                    <div class="dialogue-card s1-card flex-1">"이거… 합격 가능합니까?"</div>
+                    <div class="dialogue-card s2-card flex-1">"...솔직히 불안한데요"</div>
+                </div>
+                <div class="direction">(1초 정적. 강사 천천히, 확신 있게 카메라 응시)</div>
+                <div class="dialogue-card inst-card bg-green-900/20">
+                    <span class="role-label text-green-400">강사</span>
+                    <p class="dialogue-text font-bold">"가능하게 만드는 중이다. 한국동서발전이. 이건 시험이 아니라— <span class="highlight-text">우리 미래다.</span>"</p>
+                </div>
+                <div class="text-center mt-6 text-gray-600 italic">(페이드아웃)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            const progress = (currentSlide / (slides.length - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+            pageIndicator.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateSlide();
+    </script>
 </body>
 </html>
